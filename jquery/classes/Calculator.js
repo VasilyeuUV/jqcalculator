@@ -1,15 +1,3 @@
-jQuery(document).ready(function ($) {
-  const calc = new Calculator('#body__div-calc');
-
-  //   $('#div-calc__input-result')
-  //     .on('keyup', function (e) {
-  //       calc.OnKeyPress(e);
-  //     })
-  //     .inputFilter(function (value) {
-  //       return /^-?\d*[.,]?\d*$/.test(value);
-  //     });
-});
-
 class Calculator {
   constructor(parent) {
     this.field = $('#div-calc__input-result');
@@ -75,12 +63,12 @@ class Calculator {
   initialize(parent) {
     const table =
       '\
-          <table class="div-calc__table-keys">\
-          <thead><tr><th colspan="4">\
-          <input id="div-calc__input-result" type="text" value="0">\
-          </th></tr> </thead>\
-          <tbody></tbody> \
-          </table>';
+        <table class="div-calc__table-keys">\
+        <thead><tr><th colspan="4">\
+        <input id="div-calc__input-result" type="text" value="0">\
+        </th></tr> </thead>\
+        <tbody></tbody> \
+        </table>';
     $(parent).append(table);
 
     for (let i = 0; i < this._signs.length; i++) {
