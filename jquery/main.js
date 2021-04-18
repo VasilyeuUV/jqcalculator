@@ -1,18 +1,50 @@
 jQuery(document).ready(function ($) {
   const calc = new Calculator('#body__div-calc');
+  let $field = $('#div-calc__input-result');
 
-  //   $('#div-calc__input-result')
-  //     .on('keyup', function (e) {
-  //       calc.OnKeyPress(e);
-  //     })
-  //     .inputFilter(function (value) {
-  //       return /^-?\d*[.,]?\d*$/.test(value);
-  //     });
+  $field
+    .on('focus click', function () {
+      $(this)[0].setSelectionRange(20, 20);
+    })
+    .on('change', function () {
+      if ($field.val() === '') {
+        $field.val(0);
+      }
+    })
+    .on('keyup', function (e) {
+      calc.OnKeyPress(e);
+    })
+    .inputFilter(function (value) {
+      return /^-?\d*[.,]?\d*$/.test(value);
+    });
 });
+
+/**
+ * Ограничитель для ввода символов в <input>
+ */
+(function ($) {
+  $.fn.inputFilter = function (inputFilter) {
+    return this.on(
+      'change input keyup keydown mousedown mouseup select contextmenu drop',
+      function () {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty('oldValue')) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+          this.value = '';
+        }
+      }
+    );
+  };
+})(jQuery);
 
 class Calculator {
   constructor(parent) {
-    this.field = $('#div-calc__input-result');
+    this.$field = $('#div-calc__input-result');
     this._numberOfDigits = 12;
     this._arg1 = 0;
     this._arg2 = 0;
@@ -105,13 +137,8 @@ class Calculator {
   }
 
   OnKeyPress(e) {
-    console.log(e.key);
-    // console.log(+this._operations[e.key]);
     if (isNaN(e.key)) {
-      console.log(this.field.val());
-      this.SetArg(this.field.val());
-      console.log(this._arg1);
-      console.log(this._arg2);
+      this.SetArg(this.$field.val());
       return;
     }
 
@@ -164,4 +191,6 @@ class Calculator {
       200
     );
   }
+
+  CheckFirstZero(key) {}
 }
